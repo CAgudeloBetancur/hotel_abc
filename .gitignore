@@ -1,8 +1,80 @@
-# Archivos temporales de compilación
+# Archivos de configuración de Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.cache
+
+# Archivos de compilación y binarios
 bin/
 obj/
-*.cache
 *.nuget.*
 *.props
 *.targets
 *.json
+*.dll
+*.exe
+*.pdb
+*.log
+
+# Configuraciones y archivos de depuración
+*.csproj.user
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.ilk
+*.ipch
+*.iobj
+*.pch
+*.pdb
+*.pgstate
+*.pidb
+*.sdf
+*.sqlite
+*.sqlite3
+*.svclog
+*.tlog
+*.tmp
+*.vscode/
+
+# Paquetes de dependencias (NuGet y npm)
+packages/
+node_modules/
+wwwroot/lib/
+
+# Configuración de usuario específica
+*.sln.ide
+*.sln.*
+*.swp
+*.vsp
+*.vsscc
+Thumbs.db
+Desktop.ini
+ProjectSettings.json
+*.tmp
+
+# Archivos de publicación
+publish/
+*.publishsettings
+*.pubxml
+*.pubxml.user
+
+# Secretos y configuraciones de entorno
+appsettings.*.json
+secrets.json
+.env
+.env.*
+
+# Archivos de herramientas
+tools/
+ReSharper/
+JetBrains/
+RiderProjects/
+
+# Archivos generados por EF Core
+Migrations/
+
+# Archivos de cache
+*.lock.json
+.lock/

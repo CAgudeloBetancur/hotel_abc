@@ -1,4 +1,31 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using HotelABC.Data;
+using HotelABC.Models.Entities;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// |-- IdentityDbContext & Identity Views
+
+var connectionString = builder
+    .Configuration
+    .GetConnectionString("DefaultConnection") 
+    ?? throw new InvalidOperationException("Connection string 'HotelABCDbContextConnection' not found.");
+
+builder
+    .Services
+    .AddDbContext<HotelABCDbContext>( options => options.UseSqlServer(connectionString) );
+
+builder
+    .Services
+    .AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<HotelABCDbContext>();
+
+builder
+    .Services
+    .AddRazorPages();
+
+// --|
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -23,5 +50,11 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// |-- Identity Views Mapping
+
+app.MapRazorPages();
+
+// --|
 
 app.Run();

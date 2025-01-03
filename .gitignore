@@ -9,6 +9,10 @@
 # Archivos de compilación y binarios
 bin/
 obj/
+*.nuget.*
+*.props
+*.targets
+*.json
 *.dll
 *.exe
 *.pdb

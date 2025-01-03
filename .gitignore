@@ -1,1 +1,8 @@
-/.vs
+# Archivos temporales de compilación
+bin/
+obj/
+*.cache
+*.nuget.*
+*.props
+*.targets
+*.json

@@ -7,18 +7,14 @@
 *.cache
 
 # Archivos de compilación y binarios
-bin/
-obj/
-*.nuget.*
-*.props
-*.targets
-*.json
+HotelABC/bin/
+HotelABC/obj/
 *.dll
 *.exe
 *.pdb
 *.log
 
-# Configuraciones y archivos de depuración
+# Configuraciones de usuario específicas y temporales
 *.csproj.user
 *.dbmdl
 *.dbproj.schemaview
@@ -27,7 +23,6 @@ obj/
 *.ipch
 *.iobj
 *.pch
-*.pdb
 *.pgstate
 *.pidb
 *.sdf
@@ -38,43 +33,32 @@ obj/
 *.tmp
 *.vscode/
 
-# Paquetes de dependencias (NuGet y npm)
-packages/
-node_modules/
-wwwroot/lib/
+# Dependencias (NuGet y npm)
+HotelABC/packages/
+HotelABC/node_modules/
+# HotelABC/wwwroot/lib/
 
-# Configuración de usuario específica
-*.sln.ide
-*.sln.*
-*.swp
-*.vsp
-*.vsscc
-Thumbs.db
-Desktop.ini
-ProjectSettings.json
-*.tmp
+# Publicación y archivos de despliegue
+HotelABC/publish/
+HotelABC/*.publishsettings
+HotelABC/*.pubxml
+HotelABC/*.pubxml.user
 
-# Archivos de publicación
-publish/
-*.publishsettings
-*.pubxml
-*.pubxml.user
-
-# Secretos y configuraciones de entorno
-appsettings.*.json
-secrets.json
+# Secretos y configuraciones sensibles
+HotelABC/appsettings.*.json
+HotelABC/secrets.json
 .env
 .env.*
 
-# Archivos de herramientas
+# Herramientas y configuraciones específicas
 tools/
 ReSharper/
 JetBrains/
 RiderProjects/
 
 # Archivos generados por EF Core
-Migrations/
+HotelABC/Migrations/
 
 # Archivos de cache
-*.lock.json
-.lock/
+HotelABC/*.lock.json
+HotelABC/.lock/

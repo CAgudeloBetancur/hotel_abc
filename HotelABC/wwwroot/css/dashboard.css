@@ -1,0 +1,23 @@
+﻿#wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+#sidebar {
+    width: 250px;
+    transition: all 0.3s;
+}
+
+#sidebar.collapsed {
+    width: 0;
+    overflow: hidden;
+}
+
+#content-wrapper {
+    transition: margin-left 0.3s;
+    width: 100%;
+}
+
+#content-wrapper.expanded {
+    margin-left: 0;
+}

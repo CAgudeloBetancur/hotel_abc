@@ -1,0 +1,27 @@
+﻿@{
+
+}
+
+<div id="sidebar" class="bg-dark text-white vh-100 d-flex flex-column">
+    <div class="p-3 text-center border-bottom">
+        <h4>Menu</h4>
+    </div>
+    <partial name="_AdminSidebarOptionsPartial" />
+    @if (User.IsInRole("Admin"))
+    {
+        <partial name="_AdminSidebarOptionsPartial" />
+    }
+    else if (User.IsInRole("Receptionist"))
+    {
+        <partial name="_ReceptionistSidebarOptionsPartial" />
+    }
+    else if (User.IsInRole("Housekeeping"))
+    {
+        <partial name="_HousekeepingSidebarOptionsPartial" />
+    }
+    else if (User.IsInRole("Maintenance"))
+    {
+        <partial name="_MaintenanceSidebarOptionsPartial" />
+    }
+
+</div>

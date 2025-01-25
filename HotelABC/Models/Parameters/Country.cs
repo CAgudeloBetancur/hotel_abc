@@ -11,4 +11,5 @@ public class Country : BaseParameter
     public string IsoCode { get; set; }
 
     public ICollection<ApplicationUser> Users { get; set; }
+    public ICollection<Client> Clients { get; set; }
 }

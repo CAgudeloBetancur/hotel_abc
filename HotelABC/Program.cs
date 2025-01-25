@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using HotelABC.Data;
 using HotelABC.Models.Entities;
+using HotelABC.Data.Seeding;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder
 builder
     .Services
     .AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<HotelABCDbContext>();
 
 builder
@@ -31,6 +33,22 @@ builder
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+// |-- Seeding
+
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<HotelABCDbContext>();
+
+    await SeedData.SeedRolesAsync(roleManager);
+    await SeedData.SeedCountriesAsync(dbContext);
+    await SeedData.SeedDocumentTypes(dbContext);
+    await SeedData.SeedUsersAsync(userManager, dbContext);
+}
+
+// --|
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

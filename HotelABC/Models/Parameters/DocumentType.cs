@@ -11,4 +11,5 @@ public class DocumentType : BaseParameter
     public string Code { get; set; }
 
     public ICollection<ApplicationUser> Users { get; set; }
+    public ICollection<Client> Clients { get; set; }
 }

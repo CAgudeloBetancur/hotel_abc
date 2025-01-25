@@ -1,4 +1,5 @@
-﻿using HotelABC.Models.Entities;
+﻿using HotelABC.Models;
+using HotelABC.Models.Entities;
 using HotelABC.Models.Parameters;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,8 @@ public class HotelABCDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<OccupationState> OccupationSatates { get; set; }
     public DbSet<Relationship> Relationships { get; set; }
     public DbSet<ReportType> ReportTypes { get; set; }
+
+    public DbSet<Client> Clients { get; set; }
 
 
 

@@ -8,6 +8,7 @@ namespace HotelABC.Data;
 
 public class HotelABCDbContext : IdentityDbContext<ApplicationUser>
 {
+    // Parámeters
     public DbSet<RoomType> RoomTypes { get; set; }
     public DbSet<RoomState> RoomStates { get; set; }
     public DbSet<ReservationState> ReservationStates { get; set; }
@@ -20,11 +21,12 @@ public class HotelABCDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Relationship> Relationships { get; set; }
     public DbSet<ReportType> ReportTypes { get; set; }
 
+    // Entities
     public DbSet<Client> Clients { get; set; }
-
-
+    public DbSet<Room> Rooms { get; set; }
 
     public HotelABCDbContext(DbContextOptions options) : base(options) { }
+    
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -32,4 +34,5 @@ public class HotelABCDbContext : IdentityDbContext<ApplicationUser>
 
         builder.ApplyConfigurationsFromAssembly(typeof(HotelABCDbContext).Assembly);
     }
+
 }

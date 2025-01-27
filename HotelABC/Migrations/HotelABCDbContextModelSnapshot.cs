@@ -22,6 +22,63 @@ namespace HotelABC.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("HotelABC.Models.Client", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CountryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DocumentTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DocumentValue")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("DocumentTypeId");
+
+                    b.HasIndex("DocumentValue")
+                        .IsUnique();
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Clients");
+                });
+
             modelBuilder.Entity("HotelABC.Models.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -107,6 +164,45 @@ namespace HotelABC.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Entities.Room", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)")
+                        .HasAnnotation("RegularExpression", "^[A-Z]\\d{3}$");
+
+                    b.Property<decimal>("PricePerNight")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<Guid>("RoomStateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoomTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Number")
+                        .IsUnique();
+
+                    b.HasIndex("RoomStateId");
+
+                    b.HasIndex("RoomTypeId");
+
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("HotelABC.Models.Parameters.Country", b =>
@@ -530,6 +626,25 @@ namespace HotelABC.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("HotelABC.Models.Client", b =>
+                {
+                    b.HasOne("HotelABC.Models.Parameters.Country", "Country")
+                        .WithMany("Clients")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Parameters.DocumentType", "DocumentType")
+                        .WithMany("Clients")
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+
+                    b.Navigation("DocumentType");
+                });
+
             modelBuilder.Entity("HotelABC.Models.Entities.ApplicationUser", b =>
                 {
                     b.HasOne("HotelABC.Models.Parameters.Country", "Country")
@@ -547,6 +662,25 @@ namespace HotelABC.Migrations
                     b.Navigation("Country");
 
                     b.Navigation("DocumentType");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Entities.Room", b =>
+                {
+                    b.HasOne("HotelABC.Models.Parameters.RoomState", "RoomState")
+                        .WithMany("Rooms")
+                        .HasForeignKey("RoomStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Parameters.RoomType", "RoomType")
+                        .WithMany("Rooms")
+                        .HasForeignKey("RoomTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RoomState");
+
+                    b.Navigation("RoomType");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -602,12 +736,26 @@ namespace HotelABC.Migrations
 
             modelBuilder.Entity("HotelABC.Models.Parameters.Country", b =>
                 {
+                    b.Navigation("Clients");
+
                     b.Navigation("Users");
                 });
 
             modelBuilder.Entity("HotelABC.Models.Parameters.DocumentType", b =>
                 {
+                    b.Navigation("Clients");
+
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Parameters.RoomState", b =>
+                {
+                    b.Navigation("Rooms");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Parameters.RoomType", b =>
+                {
+                    b.Navigation("Rooms");
                 });
 #pragma warning restore 612, 618
         }

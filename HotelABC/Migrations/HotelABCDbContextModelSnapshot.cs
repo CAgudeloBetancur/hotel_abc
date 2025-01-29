@@ -79,6 +79,150 @@ namespace HotelABC.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("HotelABC.Models.Complements.Guest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DocumentTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DocumentValue")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<Guid>("RelationshipId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ReservationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ReservationId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocumentTypeId");
+
+                    b.HasIndex("RelationshipId");
+
+                    b.HasIndex("ReservationId");
+
+                    b.HasIndex("ReservationId1");
+
+                    b.ToTable("Guests");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Complements.PaymentLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LogDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NewValue")
+                        .IsRequired()
+                        .HasMaxLength(180)
+                        .HasColumnType("nvarchar(180)");
+
+                    b.Property<string>("OldValue")
+                        .IsRequired()
+                        .HasMaxLength(180)
+                        .HasColumnType("nvarchar(180)");
+
+                    b.Property<Guid>("PaymentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PaymentLogActionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ReservationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("PaymentId");
+
+                    b.HasIndex("PaymentLogActionId");
+
+                    b.HasIndex("ReservationId");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("PaymentLogs");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Complements.Report", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("nvarchar(max)")
+                        .HasAnnotation("nvarchar(max)", true);
+
+                    b.Property<string>("Parameters")
+                        .IsRequired()
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ReportTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReportTypeId");
+
+                    b.ToTable("Report", t =>
+                        {
+                            t.HasCheckConstraint("CK_Report_Data", "ISJSON(Data) = 1");
+
+                            t.HasCheckConstraint("CK_Report_Parameters", "ISJSON(Parameters) = 1");
+                        });
+                });
+
             modelBuilder.Entity("HotelABC.Models.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -172,6 +316,9 @@ namespace HotelABC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal>("BasePrice")
+                        .HasColumnType("decimal(10,2)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -180,9 +327,6 @@ namespace HotelABC.Migrations
                         .HasMaxLength(4)
                         .HasColumnType("nvarchar(4)")
                         .HasAnnotation("RegularExpression", "^[A-Z]\\d{3}$");
-
-                    b.Property<decimal>("PricePerNight")
-                        .HasColumnType("decimal(10,2)");
 
                     b.Property<Guid>("RoomStateId")
                         .HasColumnType("uniqueidentifier");
@@ -203,6 +347,148 @@ namespace HotelABC.Migrations
                     b.HasIndex("RoomTypeId");
 
                     b.ToTable("Rooms");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Operations.Occupation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CheckInDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("CheckOutDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("OccupationStateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ReservationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OccupationStateId");
+
+                    b.HasIndex("ReservationId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("Ocupations");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Operations.Payment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(180)
+                        .HasColumnType("nvarchar(180)");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PaymentMethodId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PaymentStateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ReservationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TransactionId")
+                        .HasMaxLength(180)
+                        .HasColumnType("nvarchar(180)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentMethodId");
+
+                    b.HasIndex("PaymentStateId");
+
+                    b.HasIndex("ReservationId");
+
+                    b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Operations.Reservation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CancellationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("CancellationFee")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<DateTime>("CheckInDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("CheckOutDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ReservationStateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("TotalCost")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReservationStateId");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("UserId1");
+
+                    b.HasIndex("ClientId", "CheckInDate", "CheckOutDate");
+
+                    b.ToTable("Reservations");
                 });
 
             modelBuilder.Entity("HotelABC.Models.Parameters.Country", b =>
@@ -297,7 +583,7 @@ namespace HotelABC.Migrations
                     b.ToTable("OccupationSatates");
                 });
 
-            modelBuilder.Entity("HotelABC.Models.Parameters.PaymentAction", b =>
+            modelBuilder.Entity("HotelABC.Models.Parameters.PaymentLogAction", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -645,6 +931,89 @@ namespace HotelABC.Migrations
                     b.Navigation("DocumentType");
                 });
 
+            modelBuilder.Entity("HotelABC.Models.Complements.Guest", b =>
+                {
+                    b.HasOne("HotelABC.Models.Parameters.DocumentType", "DocumentType")
+                        .WithMany("Guests")
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Parameters.Relationship", "Relationship")
+                        .WithMany("Guests")
+                        .HasForeignKey("RelationshipId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Operations.Reservation", "Reservation")
+                        .WithMany()
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Operations.Reservation", null)
+                        .WithMany("Guests")
+                        .HasForeignKey("ReservationId1");
+
+                    b.Navigation("DocumentType");
+
+                    b.Navigation("Relationship");
+
+                    b.Navigation("Reservation");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Complements.PaymentLog", b =>
+                {
+                    b.HasOne("HotelABC.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Operations.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Parameters.PaymentLogAction", "PaymentLogAction")
+                        .WithMany()
+                        .HasForeignKey("PaymentLogActionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Operations.Reservation", "Reservation")
+                        .WithMany()
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Payment");
+
+                    b.Navigation("PaymentLogAction");
+
+                    b.Navigation("Reservation");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Complements.Report", b =>
+                {
+                    b.HasOne("HotelABC.Models.Parameters.ReportType", "ReportType")
+                        .WithMany("Reports")
+                        .HasForeignKey("ReportTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ReportType");
+                });
+
             modelBuilder.Entity("HotelABC.Models.Entities.ApplicationUser", b =>
                 {
                     b.HasOne("HotelABC.Models.Parameters.Country", "Country")
@@ -681,6 +1050,89 @@ namespace HotelABC.Migrations
                     b.Navigation("RoomState");
 
                     b.Navigation("RoomType");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Operations.Occupation", b =>
+                {
+                    b.HasOne("HotelABC.Models.Parameters.OccupationState", "OccupationState")
+                        .WithMany("Occupations")
+                        .HasForeignKey("OccupationStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Operations.Reservation", "Reservation")
+                        .WithMany("Occupations")
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Entities.Room", null)
+                        .WithMany("Occupations")
+                        .HasForeignKey("RoomId");
+
+                    b.Navigation("OccupationState");
+
+                    b.Navigation("Reservation");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Operations.Payment", b =>
+                {
+                    b.HasOne("HotelABC.Models.Parameters.PaymentMethod", "PaymentMethod")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Parameters.PaymentState", "PaymentState")
+                        .WithMany()
+                        .HasForeignKey("PaymentStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Operations.Reservation", "Reservation")
+                        .WithMany()
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PaymentMethod");
+
+                    b.Navigation("PaymentState");
+
+                    b.Navigation("Reservation");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Operations.Reservation", b =>
+                {
+                    b.HasOne("HotelABC.Models.Client", "Client")
+                        .WithMany("Reservations")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Parameters.ReservationState", "ReservationState")
+                        .WithMany("Reservations")
+                        .HasForeignKey("ReservationStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Entities.Room", "Room")
+                        .WithMany("Reservations")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Entities.ApplicationUser", "User")
+                        .WithMany("Reservations")
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("ReservationState");
+
+                    b.Navigation("Room");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -734,6 +1186,30 @@ namespace HotelABC.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("HotelABC.Models.Client", b =>
+                {
+                    b.Navigation("Reservations");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("Reservations");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Entities.Room", b =>
+                {
+                    b.Navigation("Occupations");
+
+                    b.Navigation("Reservations");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Operations.Reservation", b =>
+                {
+                    b.Navigation("Guests");
+
+                    b.Navigation("Occupations");
+                });
+
             modelBuilder.Entity("HotelABC.Models.Parameters.Country", b =>
                 {
                     b.Navigation("Clients");
@@ -745,7 +1221,29 @@ namespace HotelABC.Migrations
                 {
                     b.Navigation("Clients");
 
+                    b.Navigation("Guests");
+
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Parameters.OccupationState", b =>
+                {
+                    b.Navigation("Occupations");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Parameters.Relationship", b =>
+                {
+                    b.Navigation("Guests");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Parameters.ReportType", b =>
+                {
+                    b.Navigation("Reports");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Parameters.ReservationState", b =>
+                {
+                    b.Navigation("Reservations");
                 });
 
             modelBuilder.Entity("HotelABC.Models.Parameters.RoomState", b =>

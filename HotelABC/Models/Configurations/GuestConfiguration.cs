@@ -49,5 +49,11 @@ public class GuestConfiguration : IEntityTypeConfiguration<Guest>
         builder
             .Property(g => g.ReservationId)
             .IsRequired();
+
+        builder
+            .HasOne(g => g.Reservation)
+            .WithMany()
+            .HasForeignKey(g => g.ReservationId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

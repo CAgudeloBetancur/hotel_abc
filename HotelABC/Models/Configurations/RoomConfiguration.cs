@@ -26,7 +26,7 @@ public class RoomConfiguration : IEntityTypeConfiguration<Room>
             .IsUnique();
 
         builder
-            .Property(r => r.PricePerNight)
+            .Property(r => r.BasePrice)
             .HasColumnType("decimal(10,2)")
             .IsRequired();
 

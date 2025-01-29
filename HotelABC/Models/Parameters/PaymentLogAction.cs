@@ -1,6 +1,6 @@
 ﻿namespace HotelABC.Models.Parameters;
 
-public class PaymentAction : BaseParameter
+public class PaymentLogAction : BaseParameter
 {
 
 }

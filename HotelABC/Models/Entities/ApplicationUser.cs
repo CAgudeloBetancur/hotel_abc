@@ -1,4 +1,5 @@
-﻿using HotelABC.Models.Parameters;
+﻿using HotelABC.Models.Operations;
+using HotelABC.Models.Parameters;
 using Microsoft.AspNetCore.Identity;
 
 namespace HotelABC.Models.Entities;
@@ -14,4 +15,5 @@ public class ApplicationUser : IdentityUser
 
     public Country Country { get; set; }
     public DocumentType DocumentType { get; set; }
+    public IEnumerable<Reservation> Reservations { get; set; }
 }

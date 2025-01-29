@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using HotelABC.Models.Operations;
 using HotelABC.Models.Parameters;
 
 namespace HotelABC.Models;
@@ -28,5 +29,6 @@ public class Client
 
     public Country Country { get; set; }
     public DocumentType DocumentType { get; set; }
+    public IEnumerable<Reservation> Reservations { get; set; }
 
 }

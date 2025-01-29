@@ -22,6 +22,7 @@ public class HotelABCDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<OccupationState> OccupationSatates { get; set; }
     public DbSet<Relationship> Relationships { get; set; }
     public DbSet<ReportType> ReportTypes { get; set; }
+    public DbSet<ConsumptionType> ConsumptionTypes { get; set; }
 
     // Entities
     public DbSet<Client> Clients { get; set; }
@@ -35,6 +36,9 @@ public class HotelABCDbContext : IdentityDbContext<ApplicationUser>
     // Complements
     public DbSet<Guest> Guests { get; set; }
     public DbSet<PaymentLog> PaymentLogs { get; set; }
+    public DbSet<Report> Reports { get; set; }
+    public DbSet<Consumption> Consumptions { get; set; }
+    public DbSet<RoomPriceHistory> RoomPriceHistories { get; set; }
 
     public HotelABCDbContext(DbContextOptions options) : base(options) { }
     

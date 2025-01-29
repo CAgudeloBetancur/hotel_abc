@@ -1,3 +1,4 @@
+using HotelABC.Models.Complements;
 using HotelABC.Models.Entities;
 using HotelABC.Models.Parameters;
 
@@ -16,6 +17,6 @@ namespace HotelABC.Models.Operations
 
     public Reservation Reservation { get; set; }
     public OccupationState OccupationState { get; set; }
-    
+    public ICollection<Consumption> Consumptions { get; set; }    
   }
 }

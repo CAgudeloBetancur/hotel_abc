@@ -1,5 +1,7 @@
 ﻿using HotelABC.Models;
+using HotelABC.Models.Complements;
 using HotelABC.Models.Entities;
+using HotelABC.Models.Operations;
 using HotelABC.Models.Parameters;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +18,7 @@ public class HotelABCDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<PaymentState> PaymentStates { get; set; }
     public DbSet<Country> Countries { get; set; }
     public DbSet<DocumentType> DocumentTypes { get; set; }
-    public DbSet<PaymentAction> PaymentActions { get; set; }
+    public DbSet<PaymentLogAction> PaymentActions { get; set; }
     public DbSet<OccupationState> OccupationSatates { get; set; }
     public DbSet<Relationship> Relationships { get; set; }
     public DbSet<ReportType> ReportTypes { get; set; }
@@ -24,6 +26,15 @@ public class HotelABCDbContext : IdentityDbContext<ApplicationUser>
     // Entities
     public DbSet<Client> Clients { get; set; }
     public DbSet<Room> Rooms { get; set; }
+
+    // Operations
+    public DbSet<Reservation> Reservations { get; set; }
+    public DbSet<Occupation> Ocupations { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+
+    // Complements
+    public DbSet<Guest> Guests { get; set; }
+    public DbSet<PaymentLog> PaymentLogs { get; set; }
 
     public HotelABCDbContext(DbContextOptions options) : base(options) { }
     

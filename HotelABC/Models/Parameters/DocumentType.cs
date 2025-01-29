@@ -1,4 +1,5 @@
-﻿using HotelABC.Models.Entities;
+﻿using HotelABC.Models.Complements;
+using HotelABC.Models.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace HotelABC.Models.Parameters;
@@ -12,4 +13,5 @@ public class DocumentType : BaseParameter
 
     public ICollection<ApplicationUser> Users { get; set; }
     public ICollection<Client> Clients { get; set; }
+    public ICollection<Guest> Guests { get; set; }
 }

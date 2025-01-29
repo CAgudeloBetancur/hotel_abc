@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using HotelABC.Models.Complements;
 using HotelABC.Models.Operations;
 using HotelABC.Models.Parameters;
 
@@ -22,8 +23,9 @@ public class Room
 
     public RoomType RoomType { get; set; }
     public RoomState RoomState { get; set; }
-    public IEnumerable<Occupation> Occupations { get; set; }
-    public IEnumerable<Reservation> Reservations { get; set; }
+    public ICollection<Occupation> Occupations { get; set; }
+    public ICollection<Reservation> Reservations { get; set; }
+    public ICollection<RoomPriceHistory> RoomPriceHistories { get; set; }
 
     /* Calcular número de habitación nueva
 

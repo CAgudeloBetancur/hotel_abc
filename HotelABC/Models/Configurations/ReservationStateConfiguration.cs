@@ -12,14 +12,14 @@ public class ReservationStateConfiguration : IEntityTypeConfiguration<Reservatio
             .HasKey(rs => rs.Id);
 
         builder
-           .Property(rs => rs.Name)
-           .IsRequired()
-           .HasMaxLength(25)
-           .UseCollation("SQL_Latin1_General_CP1_CI_AS") // Case insensitive
-           .HasConversion(
-               v => char.ToUpper(v[0]) + v.Substring(1).ToLower(), // Minuscula con inicial mayuscula
-               v => v
-               );
+            .Property(rs => rs.Name)
+            .IsRequired()
+            .HasMaxLength(25)
+            .UseCollation("SQL_Latin1_General_CP1_CI_AS") // Case insensitive
+            .HasConversion(
+                v => char.ToUpper(v[0]) + v.Substring(1).ToLower(), // Minuscula con inicial mayuscula
+                v => v
+                );
         builder
             .HasIndex(rs => rs.Name)
             .IsUnique();

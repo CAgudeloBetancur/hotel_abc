@@ -79,6 +79,54 @@ namespace HotelABC.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("HotelABC.Models.Complements.Consumption", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ConsumptionTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<Guid>("OccupationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConsumptionTypeId");
+
+                    b.HasIndex("OccupationId");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("Consumptions");
+                });
+
             modelBuilder.Entity("HotelABC.Models.Complements.Guest", b =>
                 {
                     b.Property<Guid>("Id")
@@ -215,12 +263,43 @@ namespace HotelABC.Migrations
 
                     b.HasIndex("ReportTypeId");
 
-                    b.ToTable("Report", t =>
+                    b.ToTable("Reports", t =>
                         {
                             t.HasCheckConstraint("CK_Report_Data", "ISJSON(Data) = 1");
 
                             t.HasCheckConstraint("CK_Report_Parameters", "ISJSON(Parameters) = 1");
                         });
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Complements.RoomPriceHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("RoomPriceHistories");
                 });
 
             modelBuilder.Entity("HotelABC.Models.Entities.ApplicationUser", b =>
@@ -489,6 +568,33 @@ namespace HotelABC.Migrations
                     b.HasIndex("ClientId", "CheckInDate", "CheckOutDate");
 
                     b.ToTable("Reservations");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Parameters.ConsumptionType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("BasePrice")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("ConsumptionTypes");
                 });
 
             modelBuilder.Entity("HotelABC.Models.Parameters.Country", b =>
@@ -931,6 +1037,31 @@ namespace HotelABC.Migrations
                     b.Navigation("DocumentType");
                 });
 
+            modelBuilder.Entity("HotelABC.Models.Complements.Consumption", b =>
+                {
+                    b.HasOne("HotelABC.Models.Parameters.ConsumptionType", "ConsumptionType")
+                        .WithMany("Consumptions")
+                        .HasForeignKey("ConsumptionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Operations.Occupation", "Occupation")
+                        .WithMany("Consumptions")
+                        .HasForeignKey("OccupationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Entities.ApplicationUser", "User")
+                        .WithMany("Consumptions")
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("ConsumptionType");
+
+                    b.Navigation("Occupation");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("HotelABC.Models.Complements.Guest", b =>
                 {
                     b.HasOne("HotelABC.Models.Parameters.DocumentType", "DocumentType")
@@ -1012,6 +1143,17 @@ namespace HotelABC.Migrations
                         .IsRequired();
 
                     b.Navigation("ReportType");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Complements.RoomPriceHistory", b =>
+                {
+                    b.HasOne("HotelABC.Models.Entities.Room", "Room")
+                        .WithMany("RoomPriceHistories")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("HotelABC.Models.Entities.ApplicationUser", b =>
@@ -1193,6 +1335,8 @@ namespace HotelABC.Migrations
 
             modelBuilder.Entity("HotelABC.Models.Entities.ApplicationUser", b =>
                 {
+                    b.Navigation("Consumptions");
+
                     b.Navigation("Reservations");
                 });
 
@@ -1201,6 +1345,13 @@ namespace HotelABC.Migrations
                     b.Navigation("Occupations");
 
                     b.Navigation("Reservations");
+
+                    b.Navigation("RoomPriceHistories");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Operations.Occupation", b =>
+                {
+                    b.Navigation("Consumptions");
                 });
 
             modelBuilder.Entity("HotelABC.Models.Operations.Reservation", b =>
@@ -1208,6 +1359,11 @@ namespace HotelABC.Migrations
                     b.Navigation("Guests");
 
                     b.Navigation("Occupations");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Parameters.ConsumptionType", b =>
+                {
+                    b.Navigation("Consumptions");
                 });
 
             modelBuilder.Entity("HotelABC.Models.Parameters.Country", b =>

@@ -29,6 +29,6 @@ public class Client
 
     public Country Country { get; set; }
     public DocumentType DocumentType { get; set; }
-    public IEnumerable<Reservation> Reservations { get; set; }
+    public ICollection<Reservation> Reservations { get; set; }
 
 }

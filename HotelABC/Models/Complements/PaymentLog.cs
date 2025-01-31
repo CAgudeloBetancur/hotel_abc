@@ -15,15 +15,9 @@ public class PaymentLog
     public string? OldValue { get; set; }
     public string NewValue { get; set; }
 
-    public Guid UserId { get; set; }
-    public Guid ReservationId { get; set; }
-    public Guid ClientId { get; set; }
     public Guid PaymentId { get; set; }
-    public Guid PaymentLogActionId { get; set; }
+    public Guid PaymentLogActionTypeId { get; set; }
 
-    public ApplicationUser User { get; set; }
-    public Reservation Reservation { get; set; }
-    public Client Client { get; set; }
     public Payment Payment { get; set; }
-    public PaymentLogAction PaymentLogAction { get; set; }
+    public PaymentLogActionType PaymentLogActionType { get; set; }
 }

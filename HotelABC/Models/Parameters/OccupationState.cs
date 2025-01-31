@@ -4,5 +4,5 @@ namespace HotelABC.Models.Parameters;
 
 public class OccupationState : BaseParameter
 {
-    public IEnumerable<Occupation> Occupations { get; set; }
+    public ICollection<Occupation> Occupations { get; set; }
 }

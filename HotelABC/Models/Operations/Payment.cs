@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HotelABC.Models.Complements;
 using HotelABC.Models.Parameters;
 
 namespace HotelABC.Models.Operations;
@@ -24,4 +25,5 @@ public class Payment
     public PaymentState PaymentState { get; set; }
     public Reservation Reservation { get; set; }
     public PaymentMethod PaymentMethod { get; set; }
+    public ICollection<PaymentLog> PaymentLogs { get; set; }
 }

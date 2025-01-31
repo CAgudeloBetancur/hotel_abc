@@ -31,24 +31,6 @@ public class PaymentLogConfiguration : IEntityTypeConfiguration<PaymentLog>
             .IsRequired();
 
         builder
-            .Property(pl => pl.UserId)
-            .IsRequired();
-
-        builder
-            .Property(pl => pl.ReservationId)
-            .IsRequired();
-
-        builder
-            .HasOne(g => g.Reservation)
-            .WithMany()
-            .HasForeignKey(g => g.ReservationId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
-            .Property(pl => pl.ClientId)
-            .IsRequired();
-
-        builder
             .Property(pl => pl.PaymentId)
             .IsRequired();
 
@@ -59,7 +41,7 @@ public class PaymentLogConfiguration : IEntityTypeConfiguration<PaymentLog>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .Property(pl => pl.PaymentLogActionId)
+            .Property(pl => pl.PaymentLogActionTypeId)
             .IsRequired();
     }
 }

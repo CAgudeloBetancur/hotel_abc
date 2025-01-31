@@ -21,14 +21,14 @@ public class Reservation
 
     public Guid UserId { get; set; }
     public Guid ClientId { get; set; }
-    public Guid RoomId { get; set; }
     public Guid ReservationStateId { get; set; }
 
     public ApplicationUser User { get; set; }
     public Client Client { get; set; }
-    public Room Room { get; set; }
     public ReservationState ReservationState { get; set; }
+    public ICollection<Room> Rooms { get; set; }
     public ICollection<Occupation> Occupations { get; set; }
     public ICollection<Guest> Guests { get; set; }
+    public ICollection<Payment> Payments { get; set; }
 
 }

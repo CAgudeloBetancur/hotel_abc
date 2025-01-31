@@ -57,10 +57,6 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
             .IsRequired();
 
         builder
-            .Property(r => r.RoomId)
-            .IsRequired();
-
-        builder
             .Property(r => r.ReservationStateId)
             .IsRequired();
     }

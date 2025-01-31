@@ -4,5 +4,5 @@ namespace HotelABC.Models.Parameters;
 
 public class RoomType : BaseParameter
 {
-  public IEnumerable<Room> Rooms { get; set; }
+  public ICollection<Room> Rooms { get; set; }
 }

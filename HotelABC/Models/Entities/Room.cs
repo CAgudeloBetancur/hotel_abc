@@ -23,7 +23,6 @@ public class Room
 
     public RoomType RoomType { get; set; }
     public RoomState RoomState { get; set; }
-    public ICollection<Occupation> Occupations { get; set; }
     public ICollection<Reservation> Reservations { get; set; }
     public ICollection<RoomPriceHistory> RoomPriceHistories { get; set; }
 

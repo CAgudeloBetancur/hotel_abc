@@ -185,9 +185,6 @@ namespace HotelABC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("LogDate")
                         .HasColumnType("datetime2");
 
@@ -204,29 +201,19 @@ namespace HotelABC.Migrations
                     b.Property<Guid>("PaymentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PaymentLogActionId")
+                    b.Property<Guid?>("PaymentId1")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ReservationId")
+                    b.Property<Guid>("PaymentLogActionTypeId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
-
                     b.HasIndex("PaymentId");
 
-                    b.HasIndex("PaymentLogActionId");
+                    b.HasIndex("PaymentId1");
 
-                    b.HasIndex("ReservationId");
-
-                    b.HasIndex("UserId1");
+                    b.HasIndex("PaymentLogActionTypeId");
 
                     b.ToTable("PaymentLogs");
                 });
@@ -449,9 +436,6 @@ namespace HotelABC.Migrations
                     b.Property<Guid>("ReservationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("RoomId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -460,8 +444,6 @@ namespace HotelABC.Migrations
                     b.HasIndex("OccupationStateId");
 
                     b.HasIndex("ReservationId");
-
-                    b.HasIndex("RoomId");
 
                     b.ToTable("Ocupations");
                 });
@@ -542,9 +524,6 @@ namespace HotelABC.Migrations
                     b.Property<Guid>("ReservationStateId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<decimal?>("TotalCost")
                         .HasColumnType("decimal(10,2)");
 
@@ -560,8 +539,6 @@ namespace HotelABC.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ReservationStateId");
-
-                    b.HasIndex("RoomId");
 
                     b.HasIndex("UserId1");
 
@@ -689,7 +666,7 @@ namespace HotelABC.Migrations
                     b.ToTable("OccupationSatates");
                 });
 
-            modelBuilder.Entity("HotelABC.Models.Parameters.PaymentLogAction", b =>
+            modelBuilder.Entity("HotelABC.Models.Parameters.PaymentLogActionType", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -710,7 +687,7 @@ namespace HotelABC.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("PaymentActions");
+                    b.ToTable("PaymentLogActionTypes");
                 });
 
             modelBuilder.Entity("HotelABC.Models.Parameters.PaymentMethod", b =>
@@ -1018,6 +995,21 @@ namespace HotelABC.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ReservationRoom", b =>
+                {
+                    b.Property<Guid>("ReservationsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoomsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ReservationsId", "RoomsId");
+
+                    b.HasIndex("RoomsId");
+
+                    b.ToTable("ReservationRoom");
+                });
+
             modelBuilder.Entity("HotelABC.Models.Client", b =>
                 {
                     b.HasOne("HotelABC.Models.Parameters.Country", "Country")
@@ -1095,43 +1087,25 @@ namespace HotelABC.Migrations
 
             modelBuilder.Entity("HotelABC.Models.Complements.PaymentLog", b =>
                 {
-                    b.HasOne("HotelABC.Models.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("HotelABC.Models.Operations.Payment", "Payment")
                         .WithMany()
                         .HasForeignKey("PaymentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("HotelABC.Models.Parameters.PaymentLogAction", "PaymentLogAction")
-                        .WithMany()
-                        .HasForeignKey("PaymentLogActionId")
+                    b.HasOne("HotelABC.Models.Operations.Payment", null)
+                        .WithMany("PaymentLogs")
+                        .HasForeignKey("PaymentId1");
+
+                    b.HasOne("HotelABC.Models.Parameters.PaymentLogActionType", "PaymentLogActionType")
+                        .WithMany("PaymentLogs")
+                        .HasForeignKey("PaymentLogActionTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HotelABC.Models.Operations.Reservation", "Reservation")
-                        .WithMany()
-                        .HasForeignKey("ReservationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("HotelABC.Models.Entities.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
-
-                    b.Navigation("Client");
-
                     b.Navigation("Payment");
 
-                    b.Navigation("PaymentLogAction");
-
-                    b.Navigation("Reservation");
-
-                    b.Navigation("User");
+                    b.Navigation("PaymentLogActionType");
                 });
 
             modelBuilder.Entity("HotelABC.Models.Complements.Report", b =>
@@ -1208,10 +1182,6 @@ namespace HotelABC.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HotelABC.Models.Entities.Room", null)
-                        .WithMany("Occupations")
-                        .HasForeignKey("RoomId");
-
                     b.Navigation("OccupationState");
 
                     b.Navigation("Reservation");
@@ -1220,19 +1190,19 @@ namespace HotelABC.Migrations
             modelBuilder.Entity("HotelABC.Models.Operations.Payment", b =>
                 {
                     b.HasOne("HotelABC.Models.Parameters.PaymentMethod", "PaymentMethod")
-                        .WithMany()
+                        .WithMany("Payments")
                         .HasForeignKey("PaymentMethodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HotelABC.Models.Parameters.PaymentState", "PaymentState")
-                        .WithMany()
+                        .WithMany("Payments")
                         .HasForeignKey("PaymentStateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HotelABC.Models.Operations.Reservation", "Reservation")
-                        .WithMany()
+                        .WithMany("Payments")
                         .HasForeignKey("ReservationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1258,12 +1228,6 @@ namespace HotelABC.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HotelABC.Models.Entities.Room", "Room")
-                        .WithMany("Reservations")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("HotelABC.Models.Entities.ApplicationUser", "User")
                         .WithMany("Reservations")
                         .HasForeignKey("UserId1");
@@ -1271,8 +1235,6 @@ namespace HotelABC.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("ReservationState");
-
-                    b.Navigation("Room");
 
                     b.Navigation("User");
                 });
@@ -1328,6 +1290,21 @@ namespace HotelABC.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ReservationRoom", b =>
+                {
+                    b.HasOne("HotelABC.Models.Operations.Reservation", null)
+                        .WithMany()
+                        .HasForeignKey("ReservationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelABC.Models.Entities.Room", null)
+                        .WithMany()
+                        .HasForeignKey("RoomsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("HotelABC.Models.Client", b =>
                 {
                     b.Navigation("Reservations");
@@ -1342,10 +1319,6 @@ namespace HotelABC.Migrations
 
             modelBuilder.Entity("HotelABC.Models.Entities.Room", b =>
                 {
-                    b.Navigation("Occupations");
-
-                    b.Navigation("Reservations");
-
                     b.Navigation("RoomPriceHistories");
                 });
 
@@ -1354,11 +1327,18 @@ namespace HotelABC.Migrations
                     b.Navigation("Consumptions");
                 });
 
+            modelBuilder.Entity("HotelABC.Models.Operations.Payment", b =>
+                {
+                    b.Navigation("PaymentLogs");
+                });
+
             modelBuilder.Entity("HotelABC.Models.Operations.Reservation", b =>
                 {
                     b.Navigation("Guests");
 
                     b.Navigation("Occupations");
+
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("HotelABC.Models.Parameters.ConsumptionType", b =>
@@ -1385,6 +1365,21 @@ namespace HotelABC.Migrations
             modelBuilder.Entity("HotelABC.Models.Parameters.OccupationState", b =>
                 {
                     b.Navigation("Occupations");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Parameters.PaymentLogActionType", b =>
+                {
+                    b.Navigation("PaymentLogs");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Parameters.PaymentMethod", b =>
+                {
+                    b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("HotelABC.Models.Parameters.PaymentState", b =>
+                {
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("HotelABC.Models.Parameters.Relationship", b =>

@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace HotelABC.Models.Configurations;
 
-public class PaymentActionConfiguration : IEntityTypeConfiguration<PaymentLogAction>
+public class PaymentActionConfiguration : IEntityTypeConfiguration<PaymentLogActionType>
 {
-    public void Configure(EntityTypeBuilder<PaymentLogAction> builder)
+    public void Configure(EntityTypeBuilder<PaymentLogActionType> builder)
     {
         builder
             .HasKey(pa => pa.Id);

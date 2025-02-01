@@ -1,5 +1,9 @@
-﻿using HotelABC.Models;
+﻿using System.Linq.Expressions;
+using HotelABC.Data.Interceptors;
+using HotelABC.Models;
 using HotelABC.Models.Complements;
+using HotelABC.Models.Configurations;
+using HotelABC.Models.Contracts;
 using HotelABC.Models.Entities;
 using HotelABC.Models.Operations;
 using HotelABC.Models.Parameters;
@@ -40,14 +44,74 @@ public class HotelABCDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Consumption> Consumptions { get; set; }
     public DbSet<RoomPriceHistory> RoomPriceHistories { get; set; }
 
-    public HotelABCDbContext(DbContextOptions options) : base(options) { }
-    
+    // Interceptors
+
+    private readonly SoftDeleteInterceptor _softDeleteInterceptor;
+
+    public HotelABCDbContext(DbContextOptions options, SoftDeleteInterceptor softDeleteInterceptor) : base(options)
+    {
+        _softDeleteInterceptor = softDeleteInterceptor;
+    }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(builder);
+        // Agregamos todas las configuraciones de los modelos
 
         builder.ApplyConfigurationsFromAssembly(typeof(HotelABCDbContext).Assembly);
+
+
+        foreach(var entityType in builder.Model.GetEntityTypes())
+        {
+            // Filtro para ignorar registros con IsDeleted = false
+
+            if(typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
+            {
+                var parameter = Expression.Parameter(entityType.ClrType, "e");
+                var property = Expression.Property(parameter, nameof(ISoftDeletable.IsDeleted));
+                var filter = Expression.Lambda(Expression.Equal(property, Expression.Constant(false)), parameter);
+                builder.Entity(entityType.ClrType).HasQueryFilter(filter);
+            }
+        }
+
+        base.OnModelCreating(builder);
     }
 
+    // Agregar interceptor
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.AddInterceptors(_softDeleteInterceptor);
+        base.OnConfiguring(optionsBuilder);
+    }
+
+    // actualizar automáticamente CreatedAt & UpdatedAt
+    public override int SaveChanges()
+    {
+        ChangeAuditableProperties();
+
+        return base.SaveChanges();
+    }
+
+    // actualizar automáticamente CreatedAt & UpdatedAt
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        ChangeAuditableProperties();
+
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void ChangeAuditableProperties()
+    {
+        foreach(var entry in ChangeTracker.Entries<IAuditable>())
+        {
+            if(entry.State == EntityState.Added)
+            {
+                entry.Entity.CreatedAt = DateTime.UtcNow;
+                entry.Entity.UpdatedAt = DateTime.UtcNow;
+            }
+            else if(entry.State == EntityState.Modified)
+            {
+                entry.Entity.UpdatedAt = DateTime.UtcNow;
+            }
+        }
+    }
 }

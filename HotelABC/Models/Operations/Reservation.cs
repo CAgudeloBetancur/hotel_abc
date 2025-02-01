@@ -8,14 +8,12 @@ using HotelABC.Models.Parameters;
 
 namespace HotelABC.Models.Operations;
 
-public class Reservation
+public class Reservation : BaseModel
 {
-    public Guid Id { get; set; }
     public DateTime CheckInDate { get; set; }
     public DateTime? CheckOutDate { get; set; }
     public decimal? TotalCost { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+
     public DateTime? CancellationDate { get; set; }
     public decimal? CancellationFee { get; set; }
 

@@ -30,14 +30,6 @@ public class ConsumptionConfiguration : IEntityTypeConfiguration<Consumption>
             .HasColumnType("decimal(10,2)");
 
         builder
-            .Property(c => c.CreatedAt)
-            .IsRequired();
-
-        builder
-            .Property(c => c.UpdatedAt)
-            .IsRequired();
-
-        builder
             .Property(c => c.Notes)
             .IsRequired(false)
             .HasMaxLength(255);

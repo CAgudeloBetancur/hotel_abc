@@ -8,9 +8,8 @@ using HotelABC.Models.Parameters;
 
 namespace HotelABC.Models.Complements;
 
-public class PaymentLog
+public class PaymentLog : BaseModel
 {
-    public Guid Id { get; set; }
     public DateTime LogDate { get; set; }
     public string? OldValue { get; set; }
     public string NewValue { get; set; }

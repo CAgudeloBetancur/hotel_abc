@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using HotelABC.Data;
 using HotelABC.Models.Entities;
 using HotelABC.Data.Seeding;
+using HotelABC.Data.Interceptors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +30,20 @@ builder
 
 // --|
 
-// Add services to the container.
+// | -- Context Accessor para el interceptor
+
+builder
+    .Services
+    .AddHttpContextAccessor();
+
+// | -- SoftDeleteInterceptor
+
+builder
+    .Services
+    .AddScoped<SoftDeleteInterceptor>();
+
+// | -- Add services to the container.
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -50,7 +64,8 @@ using (var scope = app.Services.CreateScope())
 
 // --|
 
-// Configure the HTTP request pipeline.
+// | -- Configure the HTTP request pipeline.
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

@@ -37,13 +37,5 @@ public class RoomConfiguration : IEntityTypeConfiguration<Room>
         builder
             .Property(r => r.RoomTypeId)
             .IsRequired();
-
-        builder
-            .Property(r => r.CreatedAt)
-            .IsRequired();
-
-        builder
-            .Property(r => r.UpdatedAt)
-            .IsRequired();
     }
 }

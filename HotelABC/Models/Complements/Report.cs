@@ -6,10 +6,8 @@ using HotelABC.Models.Parameters;
 
 namespace HotelABC.Models.Complements;
 
-public class Report
+public class Report : BaseModel
 {
-    public Guid Id { get; set; }
-    public DateTime CreatedDate { get; set; }
     public string Parameters { get; set; }
     public string Data { get; set; }
     public int Version { get; set; }

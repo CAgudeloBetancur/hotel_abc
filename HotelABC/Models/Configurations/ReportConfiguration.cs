@@ -18,11 +18,6 @@ public class ReportConfiguration : IEntityTypeConfiguration<Report>
             .HasKey(r => r.Id);
 
         builder
-            .Property(r => r.CreatedDate)
-            .IsRequired()
-            .HasDefaultValueSql("GETDATE()");
-
-        builder
             .Property(r => r.ReportTypeId)
             .IsRequired();
 

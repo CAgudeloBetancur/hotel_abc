@@ -29,14 +29,6 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
             .IsRequired(false);
 
         builder
-            .Property(r => r.CreatedAt)
-            .IsRequired();
-
-        builder
-            .Property(r => r.UpdatedAt)
-            .IsRequired();
-
-        builder
             .Property(r => r.CancellationDate)
             .IsRequired(false);
 

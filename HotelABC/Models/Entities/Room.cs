@@ -4,19 +4,17 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using HotelABC.Models.Complements;
+using HotelABC.Models.Contracts;
 using HotelABC.Models.Operations;
 using HotelABC.Models.Parameters;
 
 namespace HotelABC.Models.Entities;
 
-public class Room
+public class Room : BaseModel
 {
-    public Guid Id { get; set; }
     [RegularExpression(@"^[A-Z]\d{3}$", ErrorMessage = "The code must start with capital letter followed by three digits.")]
     public string Number { get; set; }
     public decimal BasePrice { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
 
     public Guid RoomStateId { get; set; }
     public Guid RoomTypeId { get; set; }

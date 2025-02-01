@@ -24,14 +24,6 @@ public class OccupationConfiguration : IEntityTypeConfiguration<Occupation>
             .IsRequired(false);
 
         builder
-            .Property(c => c.CreatedAt)
-            .IsRequired();
-
-        builder
-            .Property(c => c.UpdatedAt)
-            .IsRequired();
-
-        builder
             .Property(o => o.ReservationId)
             .IsRequired();
 

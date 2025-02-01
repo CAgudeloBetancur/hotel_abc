@@ -29,14 +29,6 @@ public class RoomPriceHistoryConfiguration : IEntityTypeConfiguration<RoomPriceH
             .IsRequired(false);
 
         builder
-            .Property(rph => rph.CreatedAt)
-            .IsRequired();
-
-        builder
-            .Property(rph => rph.UpdatedAt)
-            .IsRequired();
-
-        builder
             .Property(rph => rph.RoomId)
             .IsRequired();
     }

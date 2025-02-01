@@ -47,14 +47,6 @@ public class ClientConfiguration : IEntityTypeConfiguration<Client>
             .IsUnique();
 
         builder
-            .Property(c => c.CreatedAt)
-            .IsRequired();
-
-        builder
-            .Property(c => c.UpdatedAt)
-            .IsRequired();
-
-        builder
             .Property(c => c.CountryId)
             .IsRequired();
 

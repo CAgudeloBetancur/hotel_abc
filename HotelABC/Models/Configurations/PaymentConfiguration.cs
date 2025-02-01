@@ -39,14 +39,6 @@ public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
             .IsRequired(false);
 
         builder
-            .Property(p => p.CreatedAt)
-            .IsRequired();
-
-        builder
-            .Property(p => p.UpdatedAt)
-            .IsRequired();
-
-        builder
             .Property(p => p.PaymentStateId)
             .IsRequired();
 

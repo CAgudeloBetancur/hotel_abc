@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using HotelABC.Models.Contracts;
 using HotelABC.Models.Operations;
 using HotelABC.Models.Parameters;
 
 namespace HotelABC.Models;
 
-public class Client
+public class Client : BaseModel
 {
-    public Guid Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string DocumentValue { get; set; }
@@ -21,9 +21,7 @@ public class Client
     public string? PhoneNumber { get; set; } 
     [EmailAddress]
     public string Email { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
-
+    
     public Guid CountryId { get; set; }
     public Guid DocumentTypeId { get; set; }
 

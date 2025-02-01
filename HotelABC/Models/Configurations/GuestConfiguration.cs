@@ -31,14 +31,6 @@ public class GuestConfiguration : IEntityTypeConfiguration<Guest>
             .IsRequired();
 
         builder
-            .Property(g => g.CreatedAt)
-            .IsRequired();
-
-        builder
-            .Property(g => g.UpdatedAt)
-            .IsRequired();
-
-        builder
             .Property(g => g.RelationshipId)
             .IsRequired();
 

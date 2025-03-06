@@ -1,0 +1,91 @@
+@using HotelABC.Models.ViewModels
+@using HotelABC.Utils;
+
+@model BaseViewModel;
+
+<div class="modal-body">
+
+    <form method="post" asp-action="@(ViewBag.IsEdit ? "Edit" : "Create")" class="genericForm">
+
+        @foreach (var property in Model.GetType().GetProperties())
+        {
+            if(!ViewBag.IsEdit && property.Name == "Id") 
+            {
+                continue;
+            }
+
+            var spacedPropertyName = @UtilMethods.SplitCamelCase(property.Name);
+            var propertyName = property.Name;
+            var propertyType = property.PropertyType.Name;
+            var propertyValue = property.GetValue(Model)?.ToString() ?? "";
+
+            <div class="form-group mb-2">
+
+                @if(propertyName != "Dropdowns") 
+                {
+                    <label>@spacedPropertyName</label>
+                }
+                
+                @if (propertyType == "String" || propertyType == "Guid") // text
+                {
+                    <input 
+                        type="text" 
+                        name="@propertyName" 
+                        value="@propertyValue"
+                        readonly="@(propertyName == "Id")"
+                        class="form-control" />
+                }
+                else if (propertyType == "Int32" || propertyType == "Decimal" || propertyType == "Double") // numbers
+                {
+                    <input 
+                        type="number" 
+                        name="@propertyName" 
+                        value="@propertyValue"
+                        class="form-control" />
+                }
+                else if (propertyType == "DateTime") // dates
+                {
+                    <input 
+                        type="date" 
+                        name="@propertyName" 
+                        value="@propertyValue" 
+                        class="form-control" />
+                }
+
+                <span asp-asp-validation-for="@propertyName" class="text-danger"></span>
+
+            </div>
+        }
+
+        @if ( Model is WithDropDownsViewModel dropDownsViewModel )
+        {
+            foreach(var dropdown in dropDownsViewModel.Dropdowns) 
+            {
+                string dropdownName = dropdown.Key;
+                var options = dropdown.Value;
+
+                string selectedValue = Model.GetType().GetProperty(dropdownName)?.GetValue(Model)?.ToString() ?? "";
+
+                <div class="form-group mb-2">
+                    <label>@UtilMethods.SplitCamelCase(dropdownName)</label>
+
+                    <select name="@dropdownName" class="form-select">
+                        @foreach (var item in options)
+                        {
+                            <option value="@item.Value" selected="@(item.Value == selectedValue)">
+                                @item.Text
+                            </option>
+                        }
+                    </select>
+                </div>
+
+            }                
+        }
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+
+    </form>
+    
+</div>

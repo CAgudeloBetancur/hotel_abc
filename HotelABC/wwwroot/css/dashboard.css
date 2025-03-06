@@ -1,11 +1,13 @@
 ﻿#wrapper {
     display: flex;
     min-height: 100vh;
+    overflow: hidden;
 }
 
 #sidebar {
     width: 250px;
     transition: all 0.3s;
+    flex-shrink: 0;
 }
 
 #sidebar.collapsed {
@@ -14,10 +16,13 @@
 }
 
 #content-wrapper {
+    width: calc(100% - 250px);
+    flex-grow: 1;
     transition: margin-left 0.3s;
-    width: 100%;
+    /* width: 100%; */
 }
 
 #content-wrapper.expanded {
     margin-left: 0;
+    width:100%;
 }

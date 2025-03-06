@@ -1,0 +1,177 @@
+@using System.Text.RegularExpressions
+@using HotelABC.Utils
+@model dynamic;
+
+@{ 
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+<div class="p-3">
+    <h2 class="h1 fw-bold">@UtilMethods.SplitCamelCase(@Model.Title)</h2>
+
+    <button type="button" class="btn btn-dark mb-4 mt-4 create-btn px-4 btn-lg">
+        Create @UtilMethods.SplitCamelCase(@Model.Title)
+    </button>
+
+    <div class="table-container">
+        <table id="genericTable" class="table table-striped table-hover" style="margin:0;width:100%;">
+            <thead>
+                <tr>
+                    @foreach(var column in @Model.ColumnNames) 
+                    {
+                        <th>@UtilMethods.SplitCamelCase(column)</th>
+                    }
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="generic-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span id="action"></span> @Model.Title</h5>
+                <button type="button" class="close btn btn-outline-dark" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                @* <button id="closeModal" class="btn">&times;</button> *@
+            </div>
+            <div class="modal-form">
+
+            </div>  
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+
+        $(document).ready(function () {
+
+            function GetModal(action, id) {
+                let actionName = action === 1 ? 'Create' : 'Edit';
+                let parameter = action === 1 ? '' : `/${id}`;
+                $.get(`/@Model.Title/${actionName}${parameter}`, function (data) {
+                    $('#generic-modal .modal-form').html(data);
+                    $('#action').text(actionName);
+                    $('#generic-modal').modal('show');
+                });
+            }
+
+            let controllerName = "@Model.Title";
+            let columnNames = @Html.Raw( @Json.Serialize(Model.ColumnNames) );
+            let columns = columnNames.map( col => ( {"data":col.charAt(0).toLowerCase() + col.slice(1)} ) );
+            let saveButtonAction = 1;
+
+            columns.push({
+                "data": "Actions",
+                "render": function(data, type, row) {
+                    return `
+                        <button class="btn btn-info btn-sm view-btn px-3 me-3" data-id="${row.id}">Ver</button>
+                        <button class="btn btn-warning btn-sm edit-btn px-3 me-3 edit-btn" data-id="${row.id}">Editar</button>
+                        <button class="btn btn-danger btn-sm delete-btn px-3 delete-btn" data-id="${row.id}">Eliminar</button>
+                    `;
+                },
+                "orderable": false,
+                "searchable": false
+            });
+
+            console.log(columnNames);
+
+            let table = $('#genericTable')
+                .DataTable({
+                    "processing":true,
+                    "serverSide":true,
+                    "ajax": {
+                        "url":`/${controllerName}/GetData`,
+                        "type":"POST",
+                        "dataSrc":function(json) {
+                            console.log("Respuesta servidor:",json);
+                            return json.data;
+                        },
+                    },
+                    "columns":columns,
+                    "paging": true,
+                    "searching": true,
+                    "initComplete": function (settings, json) {  
+                        $("#genericTable")
+                            .wrap("<div style='max-height:60vh;overflow:auto; width:100%;position:relative;'></div>");            
+                    },
+                });
+
+            table.columns.adjust().draw();
+
+            $(".create-btn").on('click', function() {
+                saveButtonAction = 1;
+                GetModal( 1, null );
+            });
+
+            $('.close').on("click", function () {
+                $("#generic-modal").modal("hide");
+            });
+
+            $(document).on("click", ".edit-btn", function() {
+                let id = $(this).data('id');
+                GetModal(2, id)
+            });
+
+            $(document).on("submit", ".genericForm",function (e) {
+
+                e.preventDefault();
+
+                $.ajax({
+                    url: $(this).attr("action"),
+                    type: $(this).attr("method"),
+                    data: $(this).serialize(),
+                    dataType: "json",
+                    success: function (respuesta) {
+                        console.log(respuesta)
+                        if (respuesta.success) {
+                            console.log("Exito")
+                            window.location.href = respuesta.redirectUrl; // Redirige si es exitoso
+                        } else {
+                            console.log("Errorsito")
+                            $("#generic-modal .modal-form").html(respuesta); // Si hay errores, recarga la partial view en el modal
+                        }
+                    },
+                    error: function () {
+                        alert("Ocurrió un error al procesar la solicitud.");
+                    }
+                });
+            });
+
+            $(document).on("click", ".delete-btn", function() {
+                
+                var id = $(this).data("id");
+
+                if( !confirm(`¿Do you want to delete this ${"@UtilMethods.SplitCamelCase(Model.Title)"}`) ) {
+                    return;
+                }
+
+                $.ajax({
+                    url: `/${controllerName}/Delete/${id}`,
+                    type: "DELETE",
+                    dataType: "json",
+                    success: function(response) {
+                        if(response.success) {
+                            alert(response.message);
+                            window.location.href = response.redirectUrl;
+                        }
+                        else {
+                            alert("Error: " + response.message);
+                        }
+                    },
+                    error: function() {
+                        alert("Unexpected error");
+                    }
+                });
+            });
+
+        });
+
+
+    </script>
+}

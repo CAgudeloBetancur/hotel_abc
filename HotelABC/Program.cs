@@ -4,6 +4,12 @@ using HotelABC.Data;
 using HotelABC.Models.Entities;
 using HotelABC.Data.Seeding;
 using HotelABC.Data.Interceptors;
+using HotelABC.Repositories.Contracts;
+using HotelABC.Repositories.Implementations;
+using HotelABC.Repositories.Implementations.Entities;
+using HotelABC.Data.Contracts;
+using HotelABC.Data.UnitOfWork;
+using HotelABC.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +19,8 @@ var connectionString = builder
     .Configuration
     .GetConnectionString("DefaultConnection") 
     ?? throw new InvalidOperationException("Connection string 'HotelABCDbContextConnection' not found.");
+
+// | -- Add services to the container.
 
 builder
     .Services
@@ -42,7 +50,29 @@ builder
     .Services
     .AddScoped<SoftDeleteInterceptor>();
 
-// | -- Add services to the container.
+// -- Repositories
+
+builder
+    .Services
+    .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+builder
+    .Services
+    .AddScoped<IGenericRepository<ApplicationUser>, ApplicationUserRepository>();
+
+// -- UnitOfWork
+
+builder
+    .Services
+    .AddScoped<IUnitOfWork, UnitOfWork>();
+
+// -- Mapping
+
+builder
+    .Services
+    .AddAutoMapper(typeof(MappingProfile));
+
+// -- Controllers
 
 builder.Services.AddControllersWithViews();
 
@@ -70,7 +100,12 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
     app.UseHsts();
+}
+else 
+{
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();

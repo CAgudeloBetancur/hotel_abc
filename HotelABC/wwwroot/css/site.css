@@ -15,8 +15,22 @@ html {
 html {
   position: relative;
   min-height: 100%;
+  padding: 0;
+  margin:0;
+  /* overflow:hidden; */
 }
 
-body {
-  margin-bottom: 60px;
+#genericTable_length, #genericTable_filter {
+  padding-bottom: 1rem;
+}
+
+#genericTable_info, #genericTable_paginate {
+  padding-top: 1rem;
+}
+
+#genericTable thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: white; 
 }

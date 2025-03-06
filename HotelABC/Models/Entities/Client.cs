@@ -7,7 +7,7 @@ using HotelABC.Models.Contracts;
 using HotelABC.Models.Operations;
 using HotelABC.Models.Parameters;
 
-namespace HotelABC.Models;
+namespace HotelABC.Models.Entities;
 
 public class Client : BaseModel
 {

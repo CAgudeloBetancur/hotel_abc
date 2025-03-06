@@ -1,5 +1,6 @@
 using HotelABC.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -26,8 +27,19 @@ public class HomeController : Controller
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    public IActionResult Error(int? statusCode = null)
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        var viewModel = new ErrorViewModel
+        {
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+            StatusCode = statusCode ?? HttpContext.Response.StatusCode,
+            OriginalPath = HttpContext.Features.Get<IStatusCodeReExecuteFeature>()?.OriginalPath
+        };
+
+        return viewModel.StatusCode switch 
+        { 
+            404 => View("NotFound", viewModel), 
+            _ => View("Error" , viewModel) 
+        };
     }
 }
